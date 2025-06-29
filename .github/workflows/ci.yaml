@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Authenticate to Google Cloud using Service Account
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: '${{ secrets.GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY }}'
+
+    # Install Docker (needed for image build/push)
+    - name: Install Docker
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker.io
+
+    # Configure Docker to authenticate with Artifact Registry
+    - name: Configure Docker for Artifact Registry
+      run: |
+        gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
+
+    # Build the Docker image
+    - name: Build Docker image
+      run: |
+        docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/${{ secrets.IMAGE_NAME }}:latest .
+
+    # Push the image to Artifact Registry
+    - name: Push Docker image
+      run: |
+        docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/${{ secrets.IMAGE_NAME }}:latest
+
+    # Set up kubeconfig from base64 secret
+    - name: Setup kubeconfig
+      run: |
+        echo "${{ secrets.KUBECONFIG_B64 }}" | base64 --decode > $HOME/.kube/config
+        export KUBECONFIG=$HOME/.kube/config
+
+    # Deploy or restart your app
+    - name: Deploy app
+      run: |
+        kubectl set image deployment/${{ secrets.DEPLOYMENT_NAME }} \
+          ${{ secrets.CONTAINER_NAME }}=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/${{ secrets.IMAGE_NAME }}:latest \
+          --namespace=${{ secrets.K8S_NAMESPACE }}
