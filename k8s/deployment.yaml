@@ -16,4 +16,4 @@ spec:
       - name: flask-container
         image: <your-image-url>   # Replace this after you build & push image
         ports:
-        - containerPort: 5000
+        - containerPort: 80
