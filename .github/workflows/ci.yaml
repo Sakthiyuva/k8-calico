@@ -43,6 +43,7 @@ jobs:
     # Set up kubeconfig from base64 secret
     - name: Setup kubeconfig
       run: |
+        mkdir -p $HOME/.kube
         echo "${{ secrets.KUBECONFIG_B64 }}" | base64 --decode > $HOME/.kube/config
         export KUBECONFIG=$HOME/.kube/config
 
