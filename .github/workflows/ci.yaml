@@ -50,6 +50,5 @@ jobs:
     # Deploy or restart your app
     - name: Deploy app
       run: |
-        kubectl set image deployment/${{ secrets.DEPLOYMENT_NAME }} \
-          ${{ secrets.CONTAINER_NAME }}=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/${{ secrets.IMAGE_NAME }}:latest \
-          --namespace=${{ secrets.K8S_NAMESPACE }}
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
