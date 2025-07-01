@@ -20,10 +20,10 @@ jobs:
         credentials_json: '${{ secrets.GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY }}'
 
     # Install Docker (needed for image build/push)
-    - name: Install Docker
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker.io
+    #- name: Install Docker
+     # run: |
+      #  sudo apt-get update
+       # sudo apt-get install -y docker.io
 
     # Configure Docker to authenticate with Artifact Registry
     - name: Configure Docker for Artifact Registry
