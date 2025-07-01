@@ -16,6 +16,6 @@ spec:
       - name: artifact-registry-secret
       containers:
       - name: flask-container
-        image: us-central1-docker.pkg.dev/sound-chimera-464005-q1/k8-repo/hello-world@sha256:2629ba1924e14fa602696a5f3c020033f5d9e449a78a7cf28f4fc24fa55ee655   # Replace this after you build & push image
+        image: us-central1-docker.pkg.dev/sound-chimera-464005-q1/k8-repo/hello-world:latest
         ports:
         - containerPort: 80
