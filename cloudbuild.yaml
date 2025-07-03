@@ -1,7 +1,7 @@
 serviceAccount: cloudbuild@sound-chimera-464005-q1.iam.gserviceaccount.com
 
 options:
-  logging: CLOUD_LOGGING_ONLY
+  logsBucket: gs:// k8-bucket-07
 
 steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
