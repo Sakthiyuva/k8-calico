@@ -1,5 +1,8 @@
 serviceAccount: cloudbuild@sound-chimera-464005-q1.iam.gserviceaccount.com
 
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: bash
