@@ -13,4 +13,4 @@ steps:
       kubectl apply -f k8s/deployment.yaml
       kubectl apply -f k8s/service.yaml
 
-timeout: '900s'
+timeout: '30s'
