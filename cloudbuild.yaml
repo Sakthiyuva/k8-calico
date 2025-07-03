@@ -1,0 +1,13 @@
+serviceAccount: cloudbuild@sound-chimera-464005-q1.iam.gserviceaccount.com
+
+steps:
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: bash
+  args:
+    - -c
+    - |
+      gcloud container clusters get-credentials <CLUSTER_NAME> --region <REGION> --project $PROJECT_ID
+      kubectl apply -f k8s/deployment.yaml
+      kubectl apply -f k8s/service.yaml
+
+timeout: '900s'
